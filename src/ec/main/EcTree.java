@@ -10,7 +10,8 @@ import java.util.Random;
 public class EcTree {
     private EcNode root;
     private double fitness;
- 
+    
+  
     public EcTree(EcNode root){
     	this.root = root;
     }
@@ -49,7 +50,7 @@ public class EcTree {
     }
     
     public int compute(int x) {
-    	// TODO
+    	// TODO : to be implemented
     	return 0;
     }
     
@@ -86,7 +87,8 @@ public class EcTree {
     
     /**
      * 
-     * a recursive function that populates
+     * a recursive function that populates an inital node with child nodes until 
+     * either the specifed is reached or all the leaves are operators
      */
     
     public static void createChildNodes(EcNode node, int height) {
