@@ -28,11 +28,13 @@ public class EcTree {
      */
     
     public void displayTree() {
-    	printInOrder(this.root);
+    	//printInOrder(this.root);
+		System.out.print(this.root.toString() + " = " + this.root.calculateOutput(10));
     }
     
     
     // inorder traversal
+	/*
     private void printInOrder(EcNode node) {
     	if(node == null) {
     		return;
@@ -48,7 +50,7 @@ public class EcTree {
     	}
     	
     }
-    
+    */
     public int compute(int x) {
     	// TODO : to be implemented
     	return 0;
@@ -83,6 +85,7 @@ public class EcTree {
      * either the specifed is reached or all the leaves are operators
      */
     
+	//Implement this similar to the print
     public static void createChildNodes(EcNode node, int height) {
     	if (height == 1 && node.getType().equals("Operator")) {
     		node.leftChild = createOperandNode();
@@ -114,10 +117,7 @@ public class EcTree {
 			case 4: operator = "*"; break;
 			default: operator = null;
 		}
-		
 		ecRoot.data = operator;
-		
-		//System.out.println(operator);
 		return ecRoot;
 	}
     /**

@@ -15,5 +15,18 @@ public class EcOperand extends EcNode {
 	private void setType() {
 		this.type = "Operand";
 	}
+	
+	public String toString() {
+		return this.data;
+	}
+	
+	public double calculateOutput(int input) {
+		if (this.data.equals("x")) {
+			return input;
+		}
+		else {
+			return Integer.parseInt(this.data);
+		}
+	}
 
 }

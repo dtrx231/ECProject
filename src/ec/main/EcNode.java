@@ -9,7 +9,9 @@ public class EcNode {
 	EcNode leftChild;
 	EcNode rightChild;
 	String data;
+	protected double output;
 	protected String type;
+	
 	
 	
 	public String getType() {
@@ -19,12 +21,17 @@ public class EcNode {
 	private void setType() {
 		//TO BE IMPLEMENTED BY SUBCLASSES
 	}
-	
-	
+		
 	public void mutate() {
 		//TODO;
 	}
 	
-	
-	
+	public double getOutput() {
+		return this.output;		
+	}
+
+	public double calculateOutput(int input) {
+		//TO BE IMPLEMENTED BY SUBCLASSES
+		return 0;
+	}
 }
