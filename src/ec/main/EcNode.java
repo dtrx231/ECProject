@@ -8,11 +8,23 @@ package ec.main;
 public class EcNode {
 	EcNode leftChild;
 	EcNode rightChild;
-	String data;	
-	boolean isOperator;
+	String data;
+	protected String type;
+	
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	private void setType() {
+		//TO BE IMPLEMENTED BY SUBCLASSES
+	}
+	
 	
 	public void mutate() {
 		//TODO;
 	}
+	
+	
 	
 }

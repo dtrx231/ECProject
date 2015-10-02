@@ -37,13 +37,13 @@ public class EcTree {
     	if(node == null) {
     		return;
     	}
-    	if (node.isOperator) {
+    	if (node.getType().equals("Operator")) {
     		System.out.print( "(" );
     	}
     	printInOrder(node.leftChild);
     	System.out.print(node.data + " ");
     	printInOrder(node.rightChild);	
-    	if (node.isOperator) {
+    	if (node.getType().equals("Operator")) {
     		System.out.print( ")" );
     	}
     	
@@ -55,33 +55,25 @@ public class EcTree {
     }
     
     public static EcTree createExampleTree() {
-    	EcNode ecRoot = new EcNode();
+    	EcOperator ecRoot = new EcOperator();
     	ecRoot.data = "/";
-    	ecRoot.isOperator = true;
     			
 		EcTree ecTree = new EcTree(ecRoot);
-		ecRoot.leftChild = new EcNode();
+		ecRoot.leftChild = new EcOperator();
 		ecRoot.leftChild.data = "-";
-		ecRoot.leftChild.isOperator = true;
-		ecRoot.rightChild = new EcNode();
+		ecRoot.rightChild = new EcOperand();
 		ecRoot.rightChild.data = "2";
-		ecRoot.rightChild.isOperator = false;
 		
-		ecRoot.leftChild.leftChild = new EcNode();
+		ecRoot.leftChild.leftChild = new EcOperator();
 		ecRoot.leftChild.leftChild.data = "*";
-		ecRoot.leftChild.leftChild.isOperator = true;
-		ecRoot.leftChild.rightChild = new EcNode();
+		ecRoot.leftChild.rightChild = new EcOperand();
 		ecRoot.leftChild.rightChild.data = "1";
-		ecRoot.leftChild.rightChild.isOperator = false;
-		
-		
-		ecRoot.leftChild.leftChild.leftChild = new EcNode();
+	
+		ecRoot.leftChild.leftChild.leftChild = new EcOperand();
 		ecRoot.leftChild.leftChild.leftChild.data = "x";
-		ecRoot.leftChild.leftChild.leftChild.isOperator = false;
 		
-		ecRoot.leftChild.leftChild.rightChild = new EcNode();
+		ecRoot.leftChild.leftChild.rightChild = new EcOperand();
 		ecRoot.leftChild.leftChild.rightChild.data = "x";
-		ecRoot.leftChild.leftChild.rightChild.isOperator = false;
 		return ecTree;
     }
     
@@ -92,12 +84,12 @@ public class EcTree {
      */
     
     public static void createChildNodes(EcNode node, int height) {
-    	if (height == 1 && node.isOperator) {
+    	if (height == 1 && node.getType().equals("Operator")) {
     		node.leftChild = createOperandNode();
 			node.rightChild = createOperandNode();
     	}
     	else {
-    		if (node.isOperator) {
+    		if (node.getType().equals("Operator")) {
     		node.leftChild = createRandomNode();
 			node.rightChild = createRandomNode();
 			createChildNodes(node.leftChild, height - 1);
@@ -110,8 +102,8 @@ public class EcTree {
      * Useful for initializing the root node
      * @return a random operator node. Possible values are + - / *
      */
-    public static EcNode createOperatorNode() {
-		EcNode ecRoot = new EcNode();
+    public static EcOperator createOperatorNode() {
+		EcOperator ecRoot = new EcOperator();
 		Random rn = new Random();
 		String operator;
 		int ranInt = rn.nextInt(4) + 1;
@@ -124,7 +116,6 @@ public class EcTree {
 		}
 		
 		ecRoot.data = operator;
-		ecRoot.isOperator = true;
 		
 		//System.out.println(operator);
 		return ecRoot;
@@ -133,8 +124,8 @@ public class EcTree {
      * 
      * @return a random operand node. Possible values of 0-9 or x
      */
-    public static EcNode createOperandNode() {
-		EcNode ecRoot = new EcNode();
+    public static EcOperand createOperandNode() {
+		EcOperand ecRoot = new EcOperand();
 		Random rn = new Random();
 		String operand;
 		Integer ranInt = rn.nextInt(14);
@@ -148,7 +139,6 @@ public class EcTree {
 		}
 		
 		ecRoot.data = operand;
-		ecRoot.isOperator = false;
 		
 		//System.out.println(operand);
 		return ecRoot;
@@ -160,40 +150,40 @@ public class EcTree {
      * @return a random operand or operator node. Possible values of 0-9 or x or + - / *
      */
     public static EcNode createRandomNode() {
-    	EcNode ecNode = new EcNode();
+    	String type = "";
 		Random rn = new Random();
-		boolean isOperator;
-		String randomNode;
 		Integer ranInt = rn.nextInt(30);
 		switch(ranInt){
-			case 10: randomNode = "+"; isOperator = true; break;
+			case 10: type = "Operator"; break;
 			case 11: 
 			case 12:
-			case 13: randomNode = "*"; isOperator = true; break;
+			case 13: type = "Operand"; break;
 			case 14: 
 			case 15:
-			case 16: randomNode = "/"; isOperator = true; break;
+			case 16: type = "Operator"; break;
 			case 17: 
 			case 18:
-			case 19: randomNode = "-"; isOperator = true; break;
+			case 19: type = "Operand"; break;
 			case 20:
 			case 21:
 			case 22:
 			case 23:
 			case 24:
-			case 25:
+			case 25: type = "Operator"; break;
 			case 26:
 			case 27:
 			case 28:
 			case 29:
-			case 30: randomNode = "x"; isOperator = false; break;
-			default: randomNode = ranInt.toString();  isOperator = false;
+			case 30: type = "Operand"; break;
+			default: type = "Operand";
 		}
 		
-		ecNode.data = randomNode;
-		ecNode.isOperator = isOperator;
-		
-		return ecNode;
+		if (type.equals("Operand")) {
+			return createOperandNode();
+		}
+		else {
+			return createOperatorNode();
+		}
 	}
 
 	public double getFitness() {
