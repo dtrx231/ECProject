@@ -29,7 +29,7 @@ public class EcTree {
      */
     
     public void displayTree() {
-		System.out.print(this.root.toString() + " = " + this.root.calculateOutput(10));
+		System.out.print(this.root.toString() + " = " + this.root.calculateOutput(16));
     }
     
     public int compute(int x) {
@@ -67,11 +67,9 @@ public class EcTree {
      */
     
 	public static void createChildNodes(EcNode node, int height, boolean hasX) {
-		
-		boolean xval = hasX;
-		
-		if (height == 1) {
-			if (xval == true) {
+			
+		if (height == 1 && nodeIsOperator(node)) {
+			if (hasX == true) {
 				node.leftChild = new EcOperand();
 				node.rightChild = new EcOperand();
 			}
@@ -89,26 +87,15 @@ public class EcTree {
 			}
 		}
 		else {
-			node.leftChild = createRandomNode();
-			node.rightChild = createRandomNode();
-			if ((node.leftChild.data.equals("x") || node.rightChild.data.equals("x")))  {
-				xval = true;
-			}
-			if (node.leftChild instanceof EcOperator) {
-				createChildNodes(node.leftChild, height - 1, xval);
-			}
-			if (node.rightChild instanceof EcOperator) {
-				createChildNodes(node.rightChild, height - 1, xval);
-			}
-			if (node.leftChild instanceof EcOperand && node.rightChild instanceof EcOperand && !xval) {
-				Random rn = new Random();
-				Integer ranInt = rn.nextInt(50)+1;
-				if (ranInt <= 25) {
-					node.leftChild.data = "x";
+			if (nodeIsOperator(node)) {
+				node.leftChild = createRandomNode();
+				node.rightChild = createRandomNode();
+				
+				if ((node.leftChild.checkData("x") || node.rightChild.checkData("x")))  {
+					hasX = true;
 				}
-				else {
-					node.rightChild.data = "x";
-				}
+				createChildNodes(node.leftChild, height - 1, hasX);
+				createChildNodes(node.rightChild, height - 1, hasX);
 			}
 		}
 	}
@@ -126,7 +113,6 @@ public class EcTree {
 		else {
 			return new EcOperand();
 		}
-
 	}
 
 	public double getFitness() {
@@ -135,5 +121,23 @@ public class EcTree {
 
 	public void setFitness(double fitness) {
 		this.fitness = fitness;
+	}
+	
+	private static boolean nodeIsOperator(EcNode node) {
+		if (node instanceof EcOperator) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	private static boolean nodeIsOperand(EcNode node) {
+		if (node instanceof EcOperand) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

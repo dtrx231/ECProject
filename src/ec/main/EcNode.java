@@ -24,4 +24,13 @@ public class EcNode {
 		//TO BE IMPLEMENTED BY SUBCLASSES
 		return 0;
 	}
+	
+	public boolean checkData(String data) {
+		if (this.data.equals(data)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

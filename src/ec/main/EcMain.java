@@ -14,6 +14,8 @@ public class EcMain {
 	public static void main(String[] args) {
 		System.out.println("*****TARGET FUNCTION*****");
 		System.out.println();
+		System.out.println("Input Value = 16");
+		System.out.println();
 		EcTree ecTree1 = EcTree.createExampleTree();
 		ecTree1.displayTree();
 		System.out.println();
