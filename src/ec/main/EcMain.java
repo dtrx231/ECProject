@@ -1,6 +1,5 @@
 package ec.main;
 
-
 /**
  *  @author Duy
  *  @created 09-29-2015
@@ -22,11 +21,10 @@ public class EcMain {
 		System.out.println("*************************");
 		
 		for (int i = 0; i < INITIAL_POPULATION_SIZE ; i++) {
-			EcTree ecTree = new EcTree(MAX_DEPTH);
+			EcTree ecTree = new EcTree(3);
 			ecTree.displayTree();
 			System.out.println();		
-		}		
-				
+		}			
 	}
 
 }

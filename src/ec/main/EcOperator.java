@@ -1,4 +1,5 @@
 package ec.main;
+import java.util.Random;
 
 /**
  *  @author Dane
@@ -7,12 +8,12 @@ package ec.main;
 
 public class EcOperator extends EcNode {
 	
-	public EcOperator() {
-		this.setType();	
-	}
+	//SHOULD COME FROM SETTINGS
+	private String[] operators = {"+","-","/","*"};
 	
-	private void setType() {
-		this.type = "Operator";
+	public EcOperator() {
+		Random rn = new Random();
+		this.data = operators[rn.nextInt(operators.length)];
 	}
 	
 	public String toString() {
@@ -34,7 +35,7 @@ public class EcOperator extends EcNode {
 		}
 		else {
 			if (rightChild.data.equals("0")) {
-				output += (leftChild.calculateOutput(input) / 1);
+				output = -9999;
 			}
 			else {
 				output += (leftChild.calculateOutput(input) / rightChild.calculateOutput(input));

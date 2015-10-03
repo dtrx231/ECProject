@@ -1,4 +1,5 @@
 package ec.main;
+import java.util.Random;
 
 /**
  *  @author Duy
@@ -10,17 +11,6 @@ public class EcNode {
 	EcNode rightChild;
 	String data;
 	protected double output;
-	protected String type;
-	
-	
-	
-	public String getType() {
-		return this.type;
-	}
-	
-	private void setType() {
-		//TO BE IMPLEMENTED BY SUBCLASSES
-	}
 		
 	public void mutate() {
 		//TODO;
