@@ -16,6 +16,10 @@ public class EcNode {
 		//TODO;
 	}
 	
+	public void setOutput(double output) {
+		this.output=output;
+	}
+	
 	public double getOutput() {
 		return this.output;		
 	}
