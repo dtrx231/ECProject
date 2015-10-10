@@ -17,12 +17,13 @@ public class EcPropertyValues {
 	String targetFunction;
 	String inputData;
 	int populationSize;
-	String operands;
-	String operators;
+	String[] operands;
+	String[] operators;
 	int probSelection;
 	int probCopy;
 	int probMutate;
 	int probCrossover;
+	
 	private static volatile EcPropertyValues instance = null;
 	
 	private EcPropertyValues() throws IOException {this.getPropValues();}
@@ -38,7 +39,7 @@ public class EcPropertyValues {
 	* Open a connection to properties.config and read settings
 	*/
 	
-	public void getPropValues() throws IOException {
+	private void getPropValues() throws IOException {
 		
 		try {
 			Properties prop = new Properties();
@@ -56,8 +57,8 @@ public class EcPropertyValues {
 			this.targetFunction = prop.getProperty("targetFunction");
 			this.inputData = prop.getProperty("inputData");
 			this.populationSize = Integer.parseInt(prop.getProperty("populationSize"));
-			this.operands = prop.getProperty("operands");
-			this.operators = prop.getProperty("operators");
+			this.operands = prop.getProperty("operands").split(",");
+			this.operators = prop.getProperty("operators").split(",");
 			this.probSelection = Integer.parseInt(prop.getProperty("probSelection"));
 			this.probCopy = Integer.parseInt(prop.getProperty("probCopy"));
 			this.probMutate = Integer.parseInt(prop.getProperty("probMutate"));

@@ -10,6 +10,7 @@ import java.util.Random;
 public class EcTree {
 	
     private EcNode root;
+	private int height;
     private double fitness;
     
   
@@ -18,9 +19,22 @@ public class EcTree {
     }
     
     public EcTree(int height) {
-    	root = new EcOperator();
-    	createChildNodes(root, height, false);
+    	this.root = EcNodeFactory.getNode("ECOPERATOR");
+    	this.root.createRandomNode(height);
+		if (!this.root.search("x")) {
+			Random rn = new Random();
+			Integer ranInt = rn.nextInt(this.root.getDepth());
+			this.root.mutate("x",ranInt);
+		}
     }
+	
+	public double getFitness() {
+		return fitness;
+	}
+
+	public void setFitness(double fitness) {
+		this.fitness = fitness;
+	}
     
     /**
      * Display tree in equation form
@@ -32,11 +46,11 @@ public class EcTree {
 		System.out.print(this.root.toString() + " = " + this.root.calculateOutput(16));
     }
     
-    public int compute(int x) {
+    public int calculateFitness(int x) {
     	// TODO : to be implemented
     	return 0;
     }
-    
+   /*
     public static EcTree createExampleTree() {
     	EcOperator ecRoot = new EcOperator();
     	ecRoot.data = "/";
@@ -58,86 +72,5 @@ public class EcTree {
 		ecRoot.leftChild.leftChild.rightChild = new EcOperand();
 		ecRoot.leftChild.leftChild.rightChild.data = "x";
 		return ecTree;
-    }
-    
-    /**
-     * 
-     * a recursive function that populates an inital node with child nodes until 
-     * either the specifed is reached or all the leaves are operators
-     */
-    
-	public static void createChildNodes(EcNode node, int height, boolean hasX) {
-			
-		if (height == 1 && nodeIsOperator(node)) {
-			if (hasX == true) {
-				node.leftChild = new EcOperand();
-				node.rightChild = new EcOperand();
-			}
-			else {
-				Random rn = new Random();
-				Integer ranInt = rn.nextInt(50)+1;
-				if (ranInt <= 25) {
-					node.leftChild = new EcOperand("x");
-					node.rightChild = new EcOperand();
-				}
-				else {
-					node.leftChild = new EcOperand();
-					node.rightChild = new EcOperand("x");
-				}
-			}
-		}
-		else {
-			if (nodeIsOperator(node)) {
-				node.leftChild = createRandomNode();
-				node.rightChild = createRandomNode();
-				
-				if ((node.leftChild.checkData("x") || node.rightChild.checkData("x")))  {
-					hasX = true;
-				}
-				createChildNodes(node.leftChild, height - 1, hasX);
-				createChildNodes(node.rightChild, height - 1, hasX);
-			}
-		}
-	}
-    
-    /**
-     * 
-     * @return a random operand or operator node. Possible values of 0-9 or x or + - / *
-     */
-    public static EcNode createRandomNode() {
-		Random rn = new Random();
-		Integer ranInt = rn.nextInt(50)+1;
-		if (ranInt <= 25) {
-			return new EcOperator();
-		}
-		else {
-			return new EcOperand();
-		}
-	}
-
-	public double getFitness() {
-		return fitness;
-	}
-
-	public void setFitness(double fitness) {
-		this.fitness = fitness;
-	}
-	
-	private static boolean nodeIsOperator(EcNode node) {
-		if (node instanceof EcOperator) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	private static boolean nodeIsOperand(EcNode node) {
-		if (node instanceof EcOperand) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+    }*/
 }

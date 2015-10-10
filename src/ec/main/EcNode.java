@@ -6,16 +6,14 @@ import java.util.Random;
  *  @created 09-29-2015
  */
 
-public class EcNode {
-	EcNode leftChild;
-	EcNode rightChild;
-	String data;
+public abstract class EcNode {
+	
+	protected EcNode leftChild;
+	protected EcNode rightChild;
+	protected String data;
 	protected double output;
 		
-	public void mutate() {
-		//TODO;
-	}
-	
+
 	public void setOutput(double output) {
 		this.output=output;
 	}
@@ -23,10 +21,21 @@ public class EcNode {
 	public double getOutput() {
 		return this.output;		
 	}
-
-	public double calculateOutput(int input) {
-		//TO BE IMPLEMENTED BY SUBCLASSES
-		return 0;
+	
+	public void setLeftChild(EcNode node) {
+		this.leftChild = node;
+	}
+	
+	public EcNode getLeftChild() {
+		return this.leftChild;
+	}
+	
+	public void setRightChild(EcNode node) {
+		this.rightChild = node;
+	}
+	
+	public EcNode getRightChild() {
+		return this.rightChild;
 	}
 	
 	public boolean checkData(String data) {
@@ -37,4 +46,11 @@ public class EcNode {
 			return false;
 		}
 	}
+	
+	abstract void mutate(int depth);
+	abstract void mutate(String data,int depth);
+	abstract int getDepth();
+	abstract boolean search(String data);
+	abstract void createRandomNode(int height); 
+	abstract double calculateOutput(int input);
 }
