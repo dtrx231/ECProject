@@ -12,13 +12,29 @@ import java.util.Properties;
 
 public class EcPropertyValues {
 	
-	InputStream inputStream;
+	private InputStream inputStream;
 	int maxHeight;
-	String targetFunction;
-	String inputData;
+	private String targetFunction;
+	private String inputData;
 	int populationSize;
-	String[] operands;
-	String[] operators;
+	private String[] operands;
+	private String[] operators;
+	public String[] getOperands() {
+		return operands;
+	}
+
+	public void setOperands(String[] operands) {
+		this.operands = operands;
+	}
+
+	public String[] getOperators() {
+		return operators;
+	}
+
+	public void setOperators(String[] operators) {
+		this.operators = operators;
+	}
+
 	int probSelection;
 	int probCopy;
 	int probMutate;
@@ -26,9 +42,9 @@ public class EcPropertyValues {
 	
 	private static volatile EcPropertyValues instance = null;
 	
-	private EcPropertyValues() throws IOException {this.getPropValues();}
+	private EcPropertyValues() {this.getPropValues();}
 	
-	public static synchronized EcPropertyValues getInstance() throws IOException {
+	public static synchronized EcPropertyValues getInstance() {
 		if (instance == null) {
 			instance = new EcPropertyValues();
 		}
@@ -39,7 +55,7 @@ public class EcPropertyValues {
 	* Open a connection to properties.config and read settings
 	*/
 	
-	private void getPropValues() throws IOException {
+	private void getPropValues() {
 		
 		try {
 			Properties prop = new Properties();
@@ -67,7 +83,11 @@ public class EcPropertyValues {
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		} finally {
-			inputStream.close();
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}	
 	}
 	

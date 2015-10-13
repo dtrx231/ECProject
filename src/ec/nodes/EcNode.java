@@ -1,5 +1,4 @@
-package ec.main;
-import java.util.Random;
+package ec.nodes;
 
 /**
  *  @author Duy
@@ -12,7 +11,20 @@ public abstract class EcNode {
 	protected EcNode rightChild;
 	protected String data;
 	protected double output;
-		
+	
+	public boolean checkData(String data) {
+		if (this.data.equals(data)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public abstract int getDepth();
+	public abstract boolean search(String data);
+	public abstract void spawnRandomNode(int height); 
+	public abstract double calculateOutput(int input);
 
 	public void setOutput(double output) {
 		this.output=output;
@@ -38,19 +50,11 @@ public abstract class EcNode {
 		return this.rightChild;
 	}
 	
-	public boolean checkData(String data) {
-		if (this.data.equals(data)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	public String getData() {
+		return data;
 	}
-	
-	abstract void mutate(int depth);
-	abstract void mutate(String data,int depth);
-	abstract int getDepth();
-	abstract boolean search(String data);
-	abstract void createRandomNode(int height); 
-	abstract double calculateOutput(int input);
+
+	public void setData(String data) {
+		this.data = data;
+	}
 }

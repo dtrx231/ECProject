@@ -1,33 +1,45 @@
 
 package ec.main;
-import java.util.Random;
+import java.util.Iterator;
+
+import ec.behaviors.mutation.EcPopulationMutationMode;
+import ec.nodes.EcNode;
+import ec.nodes.EcNodeFactory;
 
 
 /**
  *  @author Duy
  *  @created 09-29-2015
  */
-public class EcTree {
+public class EcTree implements Iterable<EcNode> {
 	
     private EcNode root;
 	private int height;
     private double fitness;
     
+    private EcPopulationMutationMode mutationBehavior;
+    
+    public EcTree(){};
   
     public EcTree(EcNode root){
     	this.root = root;
     }
     
     public EcTree(int height) {
-    	this.root = EcNodeFactory.getNode("ECOPERATOR");
-    	this.root.createRandomNode(height);
-		if (!this.root.search("x")) {
-			Random rn = new Random();
-			Integer ranInt = rn.nextInt(this.root.getDepth());
-			this.root.mutate("x",ranInt);
-		}
+    	this.root = EcNodeFactory.createRandomNode(EcNodeFactory.OPERATOR);
+    	this.setHeight(height);
+    	this.root.spawnRandomNode(height);
+		//this.root.mutate();
     }
 	
+	public EcNode getRoot() {
+		return root;
+	}
+
+	public void setRoot(EcNode root) {
+		this.root = root;
+	}
+
 	public double getFitness() {
 		return fitness;
 	}
@@ -46,7 +58,7 @@ public class EcTree {
 		System.out.print(this.root.toString() + " = " + this.root.calculateOutput(16));
     }
     
-    public int calculateFitness(int x) {
+    public int calculateFitness(double[] trainingData) {
     	// TODO : to be implemented
     	return 0;
     }
@@ -73,4 +85,26 @@ public class EcTree {
 		ecRoot.leftChild.leftChild.rightChild.data = "x";
 		return ecTree;
     }*/
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public EcPopulationMutationMode getMutationBehavior() {
+		return mutationBehavior;
+	}
+
+	public void setMutationBehavior(EcPopulationMutationMode mutationBehavior) {
+		this.mutationBehavior = mutationBehavior;
+	}
+
+	@Override
+	public Iterator<EcNode> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
