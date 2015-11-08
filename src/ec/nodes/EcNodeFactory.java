@@ -1,6 +1,7 @@
 package ec.nodes;
 import java.util.Random;
-import ec.main.EcPropertyValues;
+
+import ec.util.EcPropertyValues;
 
 /**
 *  @author Dane
@@ -19,6 +20,7 @@ public class EcNodeFactory {
 	public static final String SUBTRACT = "-";
 	public static final String DIVIDE = "/";
 	public static final String MULTIPLY = "*";
+	
 	/*
 	*	Randomly generate a random number between 0-50. If the number is <= 25 return an EcOperator instance. If the number 
 	*	is < 25 return an EcOperand instance. Or if node type is specified, return that type of node.
@@ -67,6 +69,34 @@ public class EcNodeFactory {
 		Random rn = new Random();
 		String operandType = operands[rn.nextInt(operands.length)];
 		return new EcOperand(operandType);
+	}
+	
+	public static EcOperand createOperand(String operandType) {
+		return new EcOperand(operandType);
+	}
+	
+	public static EcOperator createOperator(String operatorType) {
+		EcOperator operator;
+		switch(operatorType) {
+	 	case ADD :      operator = new EcAddOperator(); operator.setData(ADD); break;
+	 	case SUBTRACT : operator = new EcSubtractOperator();  operator.setData(SUBTRACT); break;
+	 	case MULTIPLY : operator = new EcMultiplyOperator(); operator.setData(MULTIPLY); break;
+	 	case DIVIDE :   operator = new EcDivideOperator(); operator.setData(DIVIDE); break;
+	 	default:        operator = null; break;
+		}
+		return operator;
+	}
+	
+	public static String getRandomOperator() {
+		String[] operators = EcPropertyValues.getInstance().getOperators();
+		Random rn = new Random();
+		return operators[rn.nextInt(operators.length)];
+	}
+	
+	public static String getRandomOperand() {
+		String[] operands = EcPropertyValues.getInstance().getOperands();
+		Random rn = new Random();
+		return operands[rn.nextInt(operands.length)];
 	}
 	
 }

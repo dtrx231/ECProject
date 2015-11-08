@@ -1,4 +1,4 @@
-package ec.main;
+package ec.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,34 +12,57 @@ import java.util.Properties;
 
 public class EcPropertyValues {
 	
-	private InputStream inputStream;
-	int maxHeight;
+	private int maxHeight;
 	private String targetFunction;
 	private String inputData;
-	int populationSize;
+	private int populationSize;
+	private int probSelection;
+	private int probClone;
+	private int probMutate;
+	private int probCrossover;
 	private String[] operands;
 	private String[] operators;
-	public String[] getOperands() {
-		return operands;
+	
+	public int getMaxHeight() {
+		return maxHeight;
 	}
 
-	public void setOperands(String[] operands) {
-		this.operands = operands;
+	public String getTargetFunction() {
+		return targetFunction;
+	}
+
+	public String getInputData() {
+		return inputData;
+	}
+
+	public int getPopulationSize() {
+		return populationSize;
+	}
+
+	public int getProbSelection() {
+		return probSelection;
+	}
+
+	public int getProbClone() {
+		return probClone;
+	}
+
+	public int getProbMutate() {
+		return probMutate;
+	}
+
+	public int getProbCrossover() {
+		return probCrossover;
+	}
+
+	public String[] getOperands() {
+		return operands;
 	}
 
 	public String[] getOperators() {
 		return operators;
 	}
 
-	public void setOperators(String[] operators) {
-		this.operators = operators;
-	}
-
-	int probSelection;
-	int probCopy;
-	int probMutate;
-	int probCrossover;
-	
 	private static volatile EcPropertyValues instance = null;
 	
 	private EcPropertyValues() {this.getPropValues();}
@@ -56,6 +79,7 @@ public class EcPropertyValues {
 	*/
 	
 	private void getPropValues() {
+		InputStream inputStream =  null;
 		
 		try {
 			Properties prop = new Properties();
@@ -76,7 +100,7 @@ public class EcPropertyValues {
 			this.operands = prop.getProperty("operands").split(",");
 			this.operators = prop.getProperty("operators").split(",");
 			this.probSelection = Integer.parseInt(prop.getProperty("probSelection"));
-			this.probCopy = Integer.parseInt(prop.getProperty("probCopy"));
+			this.probClone = Integer.parseInt(prop.getProperty("probClone"));
 			this.probMutate = Integer.parseInt(prop.getProperty("probMutate"));
 			this.probCrossover = Integer.parseInt(prop.getProperty("probCrossover"));
 			
@@ -95,7 +119,7 @@ public class EcPropertyValues {
 		return "CONFIG SETTINGS: Max Height: " + this.maxHeight + "; Target Function: " + this.targetFunction +
 			"; Input Data: " + this.inputData + "; Population Size: " + this.populationSize + "; Operands: " +
 			this.operands + "; Operators: " + this.operators + "; Selection Probability: " + this.probSelection +
-			"; Copy Probability: " + this.probCopy + "; Mutate Probability: " + this.probMutate + "; Crossover Probability: " +
+			"; Copy Probability: " + this.probClone + "; Mutate Probability: " + this.probMutate + "; Crossover Probability: " +
 			this.probCrossover + ";";
 	}
 	

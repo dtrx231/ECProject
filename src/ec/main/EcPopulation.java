@@ -25,9 +25,9 @@ public class EcPopulation {
 	public EcPopulation() {
 		currentPopulation = new ArrayList<EcTree>();
 		nextPopulation = new ArrayList<EcTree>();
-		setCrossoverMode(new EcPopulationDefaultCrossoverMode());
-		setSelectionMode(new EcPopulationDefaultSelectionMode());
-		setMutationMode(new EcPopulationDefaultMutationMode());
+		setCrossoverMode(new EcPopulationDefaultCrossoverMode(this));
+		setSelectionMode(new EcPopulationDefaultSelectionMode(this));
+		setMutationMode(new EcPopulationDefaultMutationMode(this));
 	}
 	
 	public void doCrossover() {
@@ -40,7 +40,7 @@ public class EcPopulation {
 		mutationMode.mutate();
 	}
 	public void doClone() {
-		//TODO: to be implemented
+		System.out.println("Doing clone");
 	}
 	
 	public List<EcTree> getCurrentPopulation() {
@@ -74,5 +74,14 @@ public class EcPopulation {
 	public void setSelectionMode(EcPopulationSelectionMode selectionMode) {
 		this.selectionMode = selectionMode;
 	}
-	
+	public void displayCurrentPopulation() {
+		for (EcTree tree: currentPopulation) {
+			tree.displayTree();
+		}
+	}
+	public void displayNextPopulation() {
+		for (EcTree tree: nextPopulation) {
+			tree.displayTree();
+		}
+	}
 }

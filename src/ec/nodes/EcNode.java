@@ -21,11 +21,10 @@ public abstract class EcNode {
 		}
 	}
 	
-	public abstract int getDepth();
 	public abstract boolean search(String data);
 	public abstract void spawnRandomNode(int height); 
-	public abstract double calculateOutput(int input);
-
+	public abstract double calculateOutput(double input);
+	public abstract void mutate();
 	public void setOutput(double output) {
 		this.output=output;
 	}

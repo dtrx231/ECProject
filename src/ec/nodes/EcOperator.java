@@ -40,14 +40,9 @@ public abstract class EcOperator extends EcNode {
 		}
 	}
 	
-	public abstract double calculateOutput(int input);
+	public abstract double calculateOutput(double input);
 	
-	public int getDepth() {
-		int depthLeft = 0;
-		int depthRight = 0;
-		depthLeft += 1 + this.leftChild.getDepth();
-		depthRight += 1 + this.rightChild.getDepth();
-		return Math.max(depthLeft,depthRight);
+	public void mutate() {
+		this.data = EcNodeFactory.getRandomOperator();
 	}
-	
 }
