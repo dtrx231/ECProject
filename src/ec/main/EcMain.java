@@ -18,7 +18,7 @@ public class EcMain {
 		
 		EcPopulation pop = new EcPopulation();
 		EcTree targetFunction = new EcTree();
-		double targetFitness = 1.0;
+		double targetFitness = 0.2;
 		boolean targetFitnessReached = false;
 		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
 		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0} ;
@@ -45,6 +45,7 @@ public class EcMain {
 			pop.doCrossover();
 			pop.doMutation();
 			pop.getNextPopulation().add(clone); //add the clone to the next population
+			pop.pruneTrees(1); //Prune trees less than or equal to height of 1
 			fillUpPopulation(pop.getNextPopulation());
 			pop.setCurrentPopulation(pop.getNextPopulation());
 		}
@@ -59,7 +60,7 @@ public class EcMain {
 	public static void fillUpPopulation (List<EcTree> pop) {
 		while (pop.size() < EcPropertyValues.getInstance().getPopulationSize()) {
 			EcTree ecTree = new EcTree(EcPropertyValues.getInstance().getMaxHeight());
-			if (ecTree.hasX()) {
+			if (ecTree.hasX() && ecTree.getRoot().getDepth() > 1) { //Ensure trees have an X and are at least height of 2
 				pop.add(ecTree);
 			}
 		}

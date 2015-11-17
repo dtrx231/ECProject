@@ -46,4 +46,9 @@ public abstract class EcOperator extends EcNode {
 	public void mutate() {
 		this.data = EcNodeFactory.getRandomOperator();
 	}
+	
+	public int getDepth() {
+		int depth = Math.max(this.leftChild.getDepth() + 1,this.rightChild.getDepth()+1);
+		return depth;	
+	}
 }
