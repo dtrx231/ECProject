@@ -34,14 +34,13 @@ public class EcMain {
 					targetFunction = tree;
 					break;
 				}
-				//tree.displayTree();
+				tree.displayTree();
 			}
 			// no need to do crossover and mutation if target function is found
 			if (targetFitnessReached) {
 				break;
 			}
 			pop.doSelection();
-			System.out.println("Most fit individual is " + pop.getNextPopulation().get(0).getFitness());
 			pop.doCrossover();
 			pop.doMutation();
 			//pop.doClone();
