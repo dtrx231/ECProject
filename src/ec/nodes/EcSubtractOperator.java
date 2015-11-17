@@ -7,7 +7,7 @@ package ec.nodes;
 
 public class EcSubtractOperator extends EcOperator{
 	@Override
-	public double calculateOutput(int input) {
+	public double calculateOutput(double input) {
 		double output = 0;
 		output += (leftChild.calculateOutput(input) - rightChild.calculateOutput(input));
 		return output;

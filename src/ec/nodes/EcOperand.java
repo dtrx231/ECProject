@@ -21,12 +21,12 @@ public class EcOperand extends EcNode {
 		return this.data;
 	}
 	
-	public double calculateOutput(int input) {
+	public double calculateOutput(double input) {
 		if (this.data.equals("x")) {
 			return input;
 		}
 		else {
-			return Integer.parseInt(this.data);
+			return Double.parseDouble(this.data);
 		}
 	}
 	
@@ -38,10 +38,15 @@ public class EcOperand extends EcNode {
 			return false;
 		}
 	}
-	
+	@Override
+	public EcNode mutate() {
+		return EcNodeFactory.createRandomOperand();
+	}
 	public int getDepth() {
 		return 0;
 	}
 	
-
+	public EcNode crossOver(EcNode target) {
+		return null;
+	}
 }

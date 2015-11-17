@@ -1,10 +1,10 @@
 
 package ec.main;
+import java.util.ArrayList;
 import java.util.Iterator;
-
-import ec.behaviors.mutation.EcPopulationMutationMode;
 import ec.nodes.EcNode;
 import ec.nodes.EcNodeFactory;
+import ec.util.EcTreeIterator;
 
 
 /**
@@ -17,8 +17,6 @@ public class EcTree implements Iterable<EcNode> {
 	private int height;
     private double fitness;
     
-    private EcPopulationMutationMode mutationBehavior;
-    
     public EcTree(){};
   
     public EcTree(EcNode root){
@@ -29,7 +27,6 @@ public class EcTree implements Iterable<EcNode> {
     	this.root = EcNodeFactory.createRandomNode(EcNodeFactory.OPERATOR);
     	this.setHeight(height);
     	this.root.spawnRandomNode(height);
-		//this.root.mutate();
     }
 	
 	public EcNode getRoot() {
@@ -55,56 +52,44 @@ public class EcTree implements Iterable<EcNode> {
      */
     
     public void displayTree() {
-		System.out.print(this.root.toString() + " = " + this.root.calculateOutput(16));
+		System.out.println(this.root.toString() + " = " + this.getFitness());
     }
     
-    public int calculateFitness(double[] trainingData) {
-    	// TODO : to be implemented
-    	return 0;
-    }
-   /*
-    public static EcTree createExampleTree() {
-    	EcOperator ecRoot = new EcOperator();
-    	ecRoot.data = "/";
-    			
-		EcTree ecTree = new EcTree(ecRoot);
-		ecRoot.leftChild = new EcOperator();
-		ecRoot.leftChild.data = "-";
-		ecRoot.rightChild = new EcOperand();
-		ecRoot.rightChild.data = "2";
+    public double calculateFitness(Double[] input, Double[] output) {
+    	
+    	ArrayList<Double> out = new ArrayList<Double>();
+		for (int i = 0; i < input.length ; i++) {
+			out.add(this.root.calculateOutput(input[i]));
+		}
 		
-		ecRoot.leftChild.leftChild = new EcOperator();
-		ecRoot.leftChild.leftChild.data = "*";
-		ecRoot.leftChild.rightChild = new EcOperand();
-		ecRoot.leftChild.rightChild.data = "1";
-	
-		ecRoot.leftChild.leftChild.leftChild = new EcOperand();
-		ecRoot.leftChild.leftChild.leftChild.data = "x";
-		
-		ecRoot.leftChild.leftChild.rightChild = new EcOperand();
-		ecRoot.leftChild.leftChild.rightChild.data = "x";
-		return ecTree;
-    }*/
-
-	public int getHeight() {
+		double fit = 0;
+		for (int i = 0; i < output.length ; i++) {
+			fit += Math.abs(out.get(i) - output[i]);
+		}
+		this.fitness=fit;
+    	return fit;
+      }
+   
+   public int getHeight() {
 		return height;
 	}
 
 	public void setHeight(int height) {
 		this.height = height;
 	}
-
-	public EcPopulationMutationMode getMutationBehavior() {
-		return mutationBehavior;
-	}
-
-	public void setMutationBehavior(EcPopulationMutationMode mutationBehavior) {
-		this.mutationBehavior = mutationBehavior;
-	}
-
 	@Override
 	public Iterator<EcNode> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EcTreeIterator(root);
+	}
+
+	public boolean hasX() {
+		boolean hasX = false;
+		for (EcNode node : this) {
+			if (node.checkData("x")) {
+				hasX = true;
+				break;
+			}
+		}
+		return hasX;
 	}
 }

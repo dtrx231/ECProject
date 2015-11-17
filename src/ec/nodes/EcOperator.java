@@ -1,5 +1,7 @@
 package ec.nodes;
 
+import ec.util.EcUtils;
+
 /**
  *  @author Dane
  *  @created 10-02-2015
@@ -40,14 +42,13 @@ public abstract class EcOperator extends EcNode {
 		}
 	}
 	
-	public abstract double calculateOutput(int input);
+	public abstract double calculateOutput(double input);
 	
-	public int getDepth() {
-		int depthLeft = 0;
-		int depthRight = 0;
-		depthLeft += 1 + this.leftChild.getDepth();
-		depthRight += 1 + this.rightChild.getDepth();
-		return Math.max(depthLeft,depthRight);
+	@Override
+	public EcNode mutate() {
+		EcNode newOp = EcNodeFactory.createRandomOperator();
+		EcUtils.copyChildNodes(this, newOp);
+		return newOp;
 	}
 	
 }

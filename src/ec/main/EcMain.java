@@ -1,5 +1,9 @@
 package ec.main;
 import java.io.IOException;
+import java.util.List;
+
+import ec.util.EcPropertyValues;
+
 
 /**
  *  @author Duy
@@ -9,52 +13,57 @@ import java.io.IOException;
 public class EcMain {
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println();
-		System.out.println(EcPropertyValues.getInstance().toString());
-		System.out.println();
-		System.out.println();
-		System.out.println("*************************");
 		
-		for (int i = 0; i < EcPropertyValues.getInstance().populationSize ; i++) {
-			EcTree ecTree = new EcTree(EcPropertyValues.getInstance().maxHeight);
-			ecTree.displayTree();
-			System.out.println();		
-		}	
+		long startTime = System.currentTimeMillis();
 		
 		EcPopulation pop = new EcPopulation();
 		EcTree targetFunction = new EcTree();
-		double targetFitness = 1.0;
+		double targetFitness = 0.01;
 		boolean targetFitnessReached = false;
-		double[] trainingData =  {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
+		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
+		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0} ;
 		
 		//initialize the population
-		for (int i = 0; i < EcPropertyValues.getInstance().populationSize; i++) {
-			EcTree ecTree = new EcTree(EcPropertyValues.getInstance().maxHeight);
-			pop.getCurrentPopulation().add(ecTree);
-		}
+		fillUpPopulation(pop.getCurrentPopulation());
 		
 		while (!targetFitnessReached) {
 			// calculate fitness
 			for (EcTree tree : pop.getCurrentPopulation()) {
-				if( tree.calculateFitness(trainingData) <= targetFitness) {
+				if( tree.calculateFitness(INPUT,OUTPUT) <= targetFitness) {
 					targetFitnessReached = true;
 					targetFunction = tree;
 					break;
 				}
+				//tree.displayTree();
 			}
 			// no need to do crossover and mutation if target function is found
 			if (targetFitnessReached) {
 				break;
 			}
+			pop.doSelection();
+			System.out.println("Most fit individual is " + pop.getNextPopulation().get(0).getFitness());
 			pop.doCrossover();
 			pop.doMutation();
-			pop.doSelection();
-			pop.doClone();
+			//pop.doClone();
+			fillUpPopulation(pop.getNextPopulation());
 			pop.setCurrentPopulation(pop.getNextPopulation());
-			
 		}
 		
+		long stopTime = System.currentTimeMillis();
+		System.out.println("THIS IS THE TARGET FUNCTION");
 		targetFunction.displayTree();
+		System.out.println(" Total elapsed time: " +  (stopTime - startTime ) / 1000 + " seconds" );
+		
 	}
+	
+	public static void fillUpPopulation (List<EcTree> pop) {
+		while (pop.size() < EcPropertyValues.getInstance().getPopulationSize()) {
+			EcTree ecTree = new EcTree(EcPropertyValues.getInstance().getMaxHeight());
+			if (ecTree.hasX()) {
+				pop.add(ecTree);
+			}
+		}
+	}
+	
 
 }
