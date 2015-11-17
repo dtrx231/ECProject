@@ -46,6 +46,7 @@ public class EcPopulationDefaultCrossoverMode implements EcPopulationCrossoverMo
 						target.setRightChild(source.getRightChild());
 						source.setLeftChild(leftNodeTmp);
 						source.setRightChild(rightNodeTemp);
+						targetFound = true;
 						break;
 					}
 				}
