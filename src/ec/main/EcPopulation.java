@@ -43,6 +43,19 @@ public class EcPopulation {
 		System.out.println("Doing clone");
 	}
 	
+	/*
+	*	Remove trees from population that are less than or equal to the specified height. This will ensure a minimum height is maintained in the 
+	*	population
+	*/
+	
+	public void pruneTrees(int height) {
+		for(int i=0 ; i < this.nextPopulation.size() ; i++) {
+			if(this.nextPopulation.get(i).getRoot().getDepth() <= height) {
+				this.nextPopulation.remove(i);
+			}
+		}
+	}
+	
 	public List<EcTree> getCurrentPopulation() {
 		return currentPopulation;
 	}

@@ -51,5 +51,9 @@ public abstract class EcOperator extends EcNode {
 		EcUtils.copyChildNodes(this, newOp);
 		return newOp;
 	}
-	
+	public int getDepth() {
+		int depth = Math.max(this.leftChild.getDepth() + 1,this.rightChild.getDepth()+1);
+		return depth;	
+	}
+
 }
