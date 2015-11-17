@@ -24,7 +24,7 @@ public abstract class EcNode {
 	public abstract boolean search(String data);
 	public abstract void spawnRandomNode(int height); 
 	public abstract double calculateOutput(double input);
-	public abstract void mutate();
+	public abstract EcNode mutate();
 	public void setOutput(double output) {
 		this.output=output;
 	}

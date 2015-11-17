@@ -1,8 +1,8 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.junit.Test;
@@ -62,43 +62,6 @@ public class EcMainTest {
 		pop.displayCurrentPopulation();
 	}
 	
-	@Test
-	public void testMainLoop() {
-		boolean targetFitnessReached = false;
-		EcTree targetFunction = new EcTree();
-		EcPopulation pop = new EcPopulation();
-		EcMain.fillUpPopulation(pop.getCurrentPopulation());
-		pop.setSelectionMode(new EcPopulationDefaultSelectionMode(pop));
-		assertTrue("Selection mode check", pop.getSelectionMode() instanceof EcPopulationDefaultSelectionMode);
-		while (!targetFitnessReached) {
-			// calculate fitness
-			for (EcTree tree : pop.getCurrentPopulation()) {
-				tree.displayTree();
-				if( tree.calculateFitness(INPUT,OUTPUT) <= TARGET_FITNESS) {
-					targetFitnessReached = true;
-					targetFunction = tree;
-					break;
-				}
-			}
-			// no need to do crossover and mutation if target function is found
-			if (targetFitnessReached) {
-				break;
-			}
-			pop.doSelection();
-			assertEquals("Population size check", SELECTION_PROB, pop.getNextPopulation().size());
-			pop.doCrossover();
-			pop.doMutation();
-			//pop.doClone();
-			// fill up the population
-			EcMain.fillUpPopulation(pop.getNextPopulation());
-			assertEquals("Population size check", POPULATION_SIZE , pop.getNextPopulation().size());
-			pop.setCurrentPopulation(pop.getNextPopulation());
-			assertEquals("Population size check", POPULATION_SIZE, pop.getCurrentPopulation().size());
-			pop.setNextPopulation(new ArrayList<EcTree>());
-			
-		}
-		System.out.println("THIS IS THE TARGET FUNCTION");
-		targetFunction.displayTree();
-	}
+	
 
 }

@@ -38,9 +38,9 @@ public class EcOperand extends EcNode {
 			return false;
 		}
 	}
-	
-	public void mutate() {
-		this.data = EcNodeFactory.getRandomOperand();
+	@Override
+	public EcNode mutate() {
+		return EcNodeFactory.createRandomOperand();
 	}
 	public int getDepth() {
 		return 0;

@@ -1,5 +1,7 @@
 package ec.nodes;
 
+import ec.util.EcUtils;
+
 /**
  *  @author Dane
  *  @created 10-02-2015
@@ -42,7 +44,11 @@ public abstract class EcOperator extends EcNode {
 	
 	public abstract double calculateOutput(double input);
 	
-	public void mutate() {
-		this.data = EcNodeFactory.getRandomOperator();
+	@Override
+	public EcNode mutate() {
+		EcNode newOp = EcNodeFactory.createRandomOperator();
+		EcUtils.copyChildNodes(this, newOp);
+		return newOp;
 	}
+	
 }
