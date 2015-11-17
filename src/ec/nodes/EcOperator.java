@@ -41,6 +41,7 @@ public abstract class EcOperator extends EcNode {
 	}
 	
 	public abstract double calculateOutput(double input);
+	public abstract EcNode clone();
 	
 	public void mutate() {
 		this.data = EcNodeFactory.getRandomOperator();

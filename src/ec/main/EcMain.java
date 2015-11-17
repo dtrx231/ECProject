@@ -34,16 +34,17 @@ public class EcMain {
 					targetFunction = tree;
 					break;
 				}
-				tree.displayTree();
 			}
 			// no need to do crossover and mutation if target function is found
 			if (targetFitnessReached) {
 				break;
 			}
 			pop.doSelection();
+			System.out.println("Top Fitness Value: " + pop.getNextPopulation().get(0).getFitness());
+			EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
 			pop.doCrossover();
 			pop.doMutation();
-			//pop.doClone();
+			pop.getNextPopulation().add(clone); //add the clone to the next population
 			fillUpPopulation(pop.getNextPopulation());
 			pop.setCurrentPopulation(pop.getNextPopulation());
 		}

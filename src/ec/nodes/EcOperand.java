@@ -42,6 +42,12 @@ public class EcOperand extends EcNode {
 	public void mutate() {
 		this.data = EcNodeFactory.getRandomOperand();
 	}
+	
+	public EcNode clone() {
+		EcOperand clone = new EcOperand(this.data);
+		return clone;
+	}
+	
 	public int getDepth() {
 		return 0;
 	}
