@@ -29,11 +29,18 @@ public class EcMain {
 		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0} ;
 		FileWriter file = new FileWriter("/login.txt",true);
 		List <Double> fitness= new ArrayList<Double>();
-		long startSelection=0,stopSelection=0,startCrossOver=0,stopCrossOver=0,startMutation=0,stopMutation = 0;
+		
+		long startSelection=0,selectionTime=0,startCrossOver=0,crossOverTime=0,startMutation=0,mutationtime = 0;
+		long startGeneration=0,generationTime=0,startCalculatingFitness=0,calculateFitnessTime=0,startCloneTime=0,cloneTime=0;
 		//initialize the population
+		
+		startGeneration = System.nanoTime();
 		fillUpPopulation(pop.getCurrentPopulation());
+		generationTime = System.nanoTime() - startGeneration;
+		obj.put("generationTime",generationTime/1000000000.0);
 		
 		while (!targetFitnessReached) {
+			startCalculatingFitness = System.nanoTime();
 			// calculate fitness
 			for (EcTree tree : pop.getCurrentPopulation()) {
 				if( tree.calculateFitness(INPUT,OUTPUT) <= targetFitness) {
@@ -42,40 +49,47 @@ public class EcMain {
 					break;
 				}
 			}
+			calculateFitnessTime= System.nanoTime() - startGeneration;
+			obj.put("calculateFitnessTime",calculateFitnessTime/1000000000.0);
 			// no need to do crossover and mutation if target function is found
 			if (targetFitnessReached) {
 				break;
 			}
 			startSelection = System.nanoTime();
 			pop.doSelection();
-			stopSelection += System.nanoTime() - startSelection;
-			obj.put("Time taken for selection",stopSelection/1000000000.0);
-			//double fitnessValue=pop.getNextPopulation().get(0).getFitness();
+			selectionTime += System.nanoTime() - startSelection;
+			obj.put("selectionTime",selectionTime/1000000000.0);
+			
 			System.out.println("Top Fitness Value: " + pop.getNextPopulation().get(0).getFitness());
 			fitness.add(pop.getNextPopulation().get(0).getFitness());
 			EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
+			
 			startCrossOver = System.nanoTime();
 			pop.doCrossover();
-			stopCrossOver += System.nanoTime() - startCrossOver;
-			obj.put("Time taken for Crossover",stopCrossOver/1000000000.0 );
+			crossOverTime += System.nanoTime() - startCrossOver;
+			obj.put("crossOverTime",crossOverTime/1000000000.0 );
+			
 			startMutation = System.nanoTime();
 			pop.doMutation();
-			stopMutation += System.nanoTime() - startMutation;
-			obj.put("Time taken for Mutation",stopMutation/1000000000.0);
+			mutationtime += System.nanoTime() - startMutation;
+			obj.put("mutationTime",mutationtime/1000000000.0);
+			
+			startMutation = System.nanoTime();
 			pop.getNextPopulation().add(clone); //add the clone to the next population
 			fillUpPopulation(pop.getNextPopulation());
 			pop.setCurrentPopulation(pop.getNextPopulation());
+			
 		}
 		
 		long stopTime = System.currentTimeMillis();
 		System.out.println("THIS IS THE TARGET FUNCTION");
 		targetFunction.displayTree();
-		obj.put("Worst Fitness",fitness.get(0));
-		obj.put("Best Fitness",fitness.get(fitness.size()-1));
+		obj.put("WorstFitness",fitness.get(0));
+		obj.put("BestFitness",fitness.get(fitness.size()-1));
 		
 		System.out.println(" Total elapsed time: " +  (stopTime - startTime ) / 1000 + " seconds" );
 		obj.put("Total elapsed time", (stopTime - startTime ) / 1000);
-		file.write(obj.toJSONString());
+		file.write(obj.toJSONString()+",");
 		file.close();
 		
 	}
