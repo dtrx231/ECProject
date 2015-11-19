@@ -9,6 +9,8 @@ import ec.behaviors.mutation.EcPopulationDefaultMutationMode;
 import ec.behaviors.mutation.EcPopulationMutationMode;
 import ec.behaviors.selection.EcPopulationDefaultSelectionMode;
 import ec.behaviors.selection.EcPopulationSelectionMode;
+import ec.nodes.EcNode;
+import ec.nodes.EcOperand;
 
 /**
  *  @author Duy
@@ -52,6 +54,18 @@ public class EcPopulation {
 		for(int i=0 ; i < this.nextPopulation.size() ; i++) {
 			if(this.nextPopulation.get(i).getRoot().getDepth() <= height) {
 				this.nextPopulation.remove(i);
+			}
+		}
+	}
+	public void forceX() {
+		for (EcTree e : this.nextPopulation) {
+			if (!e.hasX()) {
+				for (EcNode n : e) {
+					if (n instanceof EcOperand) {
+						n.setData("x");
+						break;
+					}
+				}
 			}
 		}
 	}
