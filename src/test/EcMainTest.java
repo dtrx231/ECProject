@@ -3,6 +3,8 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
@@ -57,11 +59,19 @@ public class EcMainTest {
 			e.calculateFitness(INPUT, OUTPUT);
 		}
 		
+		// Test forceX
+		EcPopulation fPop = new EcPopulation();
+		EcTree fTree = TestUtils.createExampleTreeNoX();
+		List<EcTree> fList = new ArrayList<>();
+		fPop.setNextPopulation(fList);
+		fList.add(fTree);
+		fTree.displayTree();
+		assertTrue(!fTree.hasX());
+		fPop.forceX();
+		fTree.displayTree();
+		assertTrue(fTree.hasX());
 		
-		// Test basic population 
-		pop.displayCurrentPopulation();
+		
 	}
 	
-	
-
 }

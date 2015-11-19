@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import ec.util.EcPropertyValues;
+
 
 
 /**
@@ -20,7 +22,8 @@ import ec.util.EcPropertyValues;
 public class EcMain {
 	
 	public static void main(String[] args) {
-		
+		List<String> ecArgs = new ArrayList<>();
+		ecArgs.addAll(Arrays.asList(args));
 		long startTime = System.currentTimeMillis();
 		JSONObject obj = new JSONObject();
 		
@@ -79,7 +82,14 @@ public class EcMain {
 			pop.doMutation();
 			mutationtime += System.nanoTime() - startMutation;
 			
-			
+			//Prune trees less than or equal to height of 1
+			if (ecArgs.contains("-p")) {
+				pop.pruneTrees(1); 
+			}
+			//replace with the first operand with x if an individual doesn't have x
+			if (ecArgs.contains("-f")) {
+				pop.forceX();
+			}
 			
 			pop.getNextPopulation().add(clone); //add the clone to the next population
 			startGeneration2 = System.nanoTime();

@@ -25,6 +25,23 @@ public class TestUtils {
 		return ecTree;
     }
 	
+	public static EcTree createExampleTreeNoX() {
+    	EcOperator ecRoot = createOperator(DIVIDE);
+    	
+    	EcTree ecTree = new EcTree(ecRoot);
+		ecRoot.setLeftChild(createOperator(SUBTRACT));
+		ecRoot.setRightChild(createOperand("2"));
+		
+		ecRoot.getLeftChild().setLeftChild(createOperator(MULTIPLY));
+		
+		ecRoot.getLeftChild().setRightChild(createOperand("1"));
+	
+		ecRoot.getLeftChild().getLeftChild().setLeftChild(createOperand("2"));
+		ecRoot.getLeftChild().getLeftChild().setRightChild(createOperand("4"));
+		
+		return ecTree;
+    }
+	
 	public static void main(String args[]) {
 		
 		System.out.println();
