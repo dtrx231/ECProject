@@ -1,0 +1,35 @@
+apply plugin : 'java'
+apply plugin : 'application'
+mainClassName = 'ec.main.EcMain'
+sourceCompatibility = 1.8
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+   compile 'org.codehaus.jettison:jettison:1.3.7'
+   compile files("src/resources")
+   testCompile 'junit:junit:4.10'
+}
+sourceSets {
+   main {
+      java {
+         srcDirs = ["src"]
+         exclude "**/*Test.java"
+         exclude "**/Test*.java"
+      }  
+      resources {
+         srcDir 'src/resources'
+         include '*.properties'
+         output.resourcesDir = 'build/classes/main/resources'
+      }
+   }
+   test {
+      java {
+         srcDirs = ["src/test"]
+         include "**/*Test.java"
+         include "**/Test*.java"
+      }
+   }
+
+}
