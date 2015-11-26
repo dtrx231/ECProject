@@ -32,7 +32,12 @@ public class EcMain {
 		double targetFitness = 0.01;
 		boolean targetFitnessReached = false;
 		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
-		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0} ;
+		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0};
+		
+		int fitnessPlateau = 0;
+		double currentFitness = 0;
+		double previousFitness = 0;
+		final int startOver = 5000;
 		
 		
 		List <Double> fitness= new ArrayList<Double>();
@@ -65,38 +70,52 @@ public class EcMain {
 			pop.doSelection();
 			selectionTime += System.nanoTime() - startSelection;
 			
+			currentFitness = pop.getNextPopulation().get(0).getFitness();
 			
-			startCloneTime = System.nanoTime();
-			System.out.println("Top Fitness Value: " + pop.getNextPopulation().get(0).getFitness());
-			fitness.add(pop.getNextPopulation().get(0).getFitness());
-			EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
-			cloneTime += System.nanoTime() - startCloneTime;
-			
-			
-			startCrossOver = System.nanoTime();
-			pop.doCrossover();
-			crossOverTime += System.nanoTime() - startCrossOver;
-			
-			
-			startMutation = System.nanoTime();
-			pop.doMutation();
-			mutationtime += System.nanoTime() - startMutation;
-			
-			//Prune trees less than or equal to height of 1
-			if (ecArgs.contains("-p")) {
-				pop.pruneTrees(1); 
-			}
-			//replace with the first operand with x if an individual doesn't have x
-			if (ecArgs.contains("-f")) {
-				pop.forceX();
+			if (currentFitness == previousFitness) {
+				fitnessPlateau += 1;
+			} else {
+				fitnessPlateau = 0;
 			}
 			
-			pop.getNextPopulation().add(clone); //add the clone to the next population
+			previousFitness = currentFitness;
+			
+			if (fitnessPlateau <= startOver) {
+				startCloneTime = System.nanoTime();
+				System.out.println("Top Fitness Value: " + currentFitness);
+				fitness.add(currentFitness);
+				EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
+				cloneTime += System.nanoTime() - startCloneTime;
+				
+				
+				startCrossOver = System.nanoTime();
+				pop.doCrossover();
+				crossOverTime += System.nanoTime() - startCrossOver;
+				
+				
+				startMutation = System.nanoTime();
+				pop.doMutation();
+				mutationtime += System.nanoTime() - startMutation;
+				
+				//Prune trees less than or equal to height of 1
+				if (ecArgs.contains("-p")) {
+					pop.pruneTrees(1); 
+				}
+				//replace with the first operand with x if an individual doesn't have x
+				if (ecArgs.contains("-f")) {
+					pop.forceX();
+				}
+				
+				pop.getNextPopulation().add(clone); //add the clone to the next population
+
+			} else {
+				fitnessPlateau = 0;
+				pop.setNextPopulation(new ArrayList<EcTree>());
+			}
 			startGeneration2 = System.nanoTime();
 			fillUpPopulation(pop.getNextPopulation());
 			generationTime2 += System.nanoTime() - startGeneration2;
 			pop.setCurrentPopulation(pop.getNextPopulation());
-			
 		}
 		
 		long stopTime = System.currentTimeMillis();
@@ -114,15 +133,16 @@ public class EcMain {
 			obj.put("crossOverTime",crossOverTime/1000000000.0 );
 			obj.put("mutationTime",mutationtime/1000000000.0);
 			Collections.sort(fitness);
-			obj.put("bestFitness",fitness.get(0));
+			obj.put("bestFitness",targetFunction.getFitness());
 			obj.put("worstFitness",fitness.get(fitness.size()-1));
 			obj.put("Total elapsed time", (stopTime - startTime ) / 1000);
+			obj.put("Target Function",targetFunction.getRoot().toString());
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 		
 		try {
-			File file = new File("/EcLog.txt");
+			File file = new File("C:\\Users\\Dane\\Documents\\GitHub\\ECProject\\src\\EcLog.txt");
 			System.out.println("Output file was saved at " + file.getAbsolutePath());
 			FileWriter fw = new FileWriter(file, true);
 			fw.write(obj.toString()+",");
