@@ -1,5 +1,3 @@
-package test;
-
 import ec.main.EcTree;
 import ec.nodes.EcNode;
 import ec.nodes.EcOperator;

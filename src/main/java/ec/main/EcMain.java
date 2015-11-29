@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import com.google.gson.Gson;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-
+import ec.analytics.EcExecTimeBean;
 import ec.util.EcPropertyValues;
 
 
@@ -24,19 +23,19 @@ public class EcMain {
 	public static void main(String[] args) {
 		List<String> ecArgs = new ArrayList<>();
 		ecArgs.addAll(Arrays.asList(args));
-		long startTime = System.currentTimeMillis();
-		JSONObject obj = new JSONObject();
+		long startTime = System.nanoTime();
+		EcExecTimeBean execTimeBean = new EcExecTimeBean();
 		
 		EcPopulation pop = new EcPopulation();
 		EcTree targetFunction = new EcTree();
 		double targetFitness = 0.01;
 		boolean targetFitnessReached = false;
+		// TODO: move to config file
 		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
 		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0} ;
 		
-		
 		List <Double> fitness= new ArrayList<Double>();
-		
+		// TODO: refactor with aop
 		long startSelection=0,selectionTime=0,startCrossOver=0,crossOverTime=0,startMutation=0,mutationtime = 0;
 		long startGeneration1=0,startGeneration2=0,generationTime1=0,generationTime2=0,startCalculatingFitness=0,calculateFitnessTime=0,startCloneTime=0,cloneTime=0;
 		//initialize the population
@@ -67,7 +66,7 @@ public class EcMain {
 			
 			
 			startCloneTime = System.nanoTime();
-			System.out.println("Top Fitness Value: " + pop.getNextPopulation().get(0).getFitness());
+			//System.out.println("Top Fitness Value: " + pop.getNextPopulation().get(0).getFitness());
 			fitness.add(pop.getNextPopulation().get(0).getFitness());
 			EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
 			cloneTime += System.nanoTime() - startCloneTime;
@@ -99,40 +98,41 @@ public class EcMain {
 			
 		}
 		
-		long stopTime = System.currentTimeMillis();
+		long stopTime = System.nanoTime();
 		System.out.println("THIS IS THE TARGET FUNCTION");
-		targetFunction.displayTree();
-		System.out.println(" Total elapsed time: " +  (stopTime - startTime ) / 1000 + " seconds" );
+		System.out.println(targetFunction.getRoot().toString());
+		System.out.println(" Total elapsed time: " +  (stopTime - startTime ) / 1000000000.0 + " seconds" );
 		
+		// package 
+		execTimeBean.setGenerationTime1(generationTime1/1000000000.0);
+		execTimeBean.setGenerationTime2(generationTime2/1000000000.0);
+		execTimeBean.setCalculateFitnessTime(calculateFitnessTime/1000000000.0);
+		execTimeBean.setSelectionTime(selectionTime/1000000000.0);
+		execTimeBean.setCloneTime(cloneTime/1000000000.0);
+		execTimeBean.setCrossOverTime(crossOverTime/1000000000.0 );
+		execTimeBean.setMutationTime(mutationtime/1000000000.0);
+		Collections.sort(fitness);
+		execTimeBean.setBestFitness(fitness.get(0));
+		execTimeBean.setWorstFitness(fitness.get(fitness.size()-1));
+		execTimeBean.setTotalTime((stopTime - startTime ) / 1000000000.0);
+		execTimeBean.setTargetFunction(targetFunction.getRoot().toString());
+		execTimeBean.setTargetFunctionFitness(targetFunction.getFitness());
+		// save
+		Gson gson = new Gson();
+		File file = new File("ecLog.json");
+		System.out.println("Output file was saved at " + file.getAbsolutePath());
+		FileWriter fw;
 		try {
-			obj.put("generationTime1",generationTime1/1000000000.0);
-			obj.put("generationTime2",generationTime2/1000000000.0);
-			obj.put("totalgenerationTime", (generationTime1+generationTime2)/1000000000.0);
-			obj.put("calculateFitnessTime",calculateFitnessTime/1000000000.0);
-			obj.put("selectionTime",selectionTime/1000000000.0);
-			obj.put("cloneTime", cloneTime/1000000000.0);
-			obj.put("crossOverTime",crossOverTime/1000000000.0 );
-			obj.put("mutationTime",mutationtime/1000000000.0);
-			Collections.sort(fitness);
-			obj.put("bestFitness",fitness.get(0));
-			obj.put("worstFitness",fitness.get(fitness.size()-1));
-			obj.put("Total elapsed time", (stopTime - startTime ) / 1000);
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		
-		try {
-			File file = new File("/EcLog.txt");
-			System.out.println("Output file was saved at " + file.getAbsolutePath());
-			FileWriter fw = new FileWriter(file, true);
-			fw.write(obj.toString()+",");
+			fw = new FileWriter(file, true);
+			fw.write(gson.toJson(execTimeBean)+",");
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-	}
 	
+		
+	}
 	public static void fillUpPopulation (List<EcTree> pop) {
 		while (pop.size() < EcPropertyValues.getInstance().getPopulationSize()) {
 			EcTree ecTree = new EcTree(EcPropertyValues.getInstance().getMaxHeight());

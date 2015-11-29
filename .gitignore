@@ -16,3 +16,7 @@ build
 *.swp
 # Scripts #
 *.bat
+*.sh
+*.sh~
+#Logs
+*.json

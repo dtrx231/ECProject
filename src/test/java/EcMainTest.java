@@ -1,5 +1,3 @@
-package test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -30,7 +28,7 @@ public class EcMainTest {
 		EcTree ecTree = TestUtils.createExampleTree();
 		System.out.println("Target function");
 		ecTree.displayTree();
-		assertEquals("Checking calculateOutput() 1 " , 4,  ecTree.getRoot().calculateOutput(-3), 0.000000000000001 );
+		assertEquals("Checking calculateOutput() 1 " , 4.0,  ecTree.getRoot().calculateOutput(-3.0 ), 0.000000000000001 );
 		assertEquals("Checking calculateOutput() 2 " , -0.5,  ecTree.getRoot().calculateOutput(0), 0.000000000000001 );
 		assertEquals("Fitness of target function should be 0" , 0,  ecTree.calculateFitness(INPUT, OUTPUT), 0.000000000000001 );
 		assertEquals("Fitness of target function should be set", 0 , ecTree.getFitness(), 0.000000000000001);
