@@ -12,12 +12,28 @@ dependencies {
 task (runEcMain, dependsOn: 'classes', type: JavaExec) {
    main = 'ec.main.EcMain'
    classpath = sourceSets.main.runtimeClasspath
-   // command line args
-   // args '-f'
-   // args '-p'
 }
 task (runEcAnalytics, dependsOn: 'classes', type: JavaExec) {
    main = 'ec.analytics.EcAnalytics'
    classpath = sourceSets.main.runtimeClasspath
+}
+task (runEcMainf, dependsOn: 'classes', type: JavaExec) {
+   main = 'ec.main.EcMain'
+   classpath = sourceSets.main.runtimeClasspath
+   // command line args
+   args '-f'
+}
+task (runEcMainp, dependsOn: 'classes', type: JavaExec) {
+   main = 'ec.main.EcMain'
+   classpath = sourceSets.main.runtimeClasspath
+   // command line args
+   args '-p'
+}
+task (runEcMainfp, dependsOn: 'classes', type: JavaExec) {
+   main = 'ec.main.EcMain'
+   classpath = sourceSets.main.runtimeClasspath
+   // command line args
+   args '-f'
+   args '-p'
 }
 

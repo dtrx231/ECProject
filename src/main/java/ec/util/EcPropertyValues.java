@@ -83,7 +83,7 @@ public class EcPropertyValues {
 		
 		try {
 			Properties prop = new Properties();
-			String propFileName = "resources/config.properties";
+			String propFileName = "config.properties";
 			
 			inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 			

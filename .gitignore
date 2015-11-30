@@ -6,6 +6,8 @@ target
 # Gradle #
 .gradle
 build
+bin
+log
 *.class
 # Package Files #
 *.jar
