@@ -9,13 +9,21 @@ dependencies {
    compile 'com.google.code.gson:gson:2.3.1'
    testCompile 'junit:junit:4.10'
 }
+task (runEcAnalytics, dependsOn: 'classes', type: JavaExec) {
+   main = 'ec.analytics.EcAnalytics'
+   classpath = sourceSets.main.runtimeClasspath
+}
 task (runEcMain, dependsOn: 'classes', type: JavaExec) {
    main = 'ec.main.EcMain'
    classpath = sourceSets.main.runtimeClasspath
 }
-task (runEcAnalytics, dependsOn: 'classes', type: JavaExec) {
-   main = 'ec.analytics.EcAnalytics'
+task (runEcMainAll, dependsOn: 'classes', type: JavaExec) {
+   main = 'ec.main.EcMain'
    classpath = sourceSets.main.runtimeClasspath
+   // command line args
+   args '-f'
+   args '-p'
+   args '-k'
 }
 task (runEcMainf, dependsOn: 'classes', type: JavaExec) {
    main = 'ec.main.EcMain'
@@ -36,4 +44,11 @@ task (runEcMainfp, dependsOn: 'classes', type: JavaExec) {
    args '-f'
    args '-p'
 }
+task (runEcMaink, dependsOn: 'classes', type: JavaExec) {
+   main = 'ec.main.EcMain'
+   classpath = sourceSets.main.runtimeClasspath
+   // command line args
+   args '-k'
+}
+
 

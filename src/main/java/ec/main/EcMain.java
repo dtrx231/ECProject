@@ -32,9 +32,14 @@ public class EcMain {
 		boolean targetFitnessReached = false;
 		// TODO: move to config file
 		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
-		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0} ;
+		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0};
 		
-		List <Double> fitness= new ArrayList<Double>();
+		int fitnessPlateau = 0;
+		double currentTopFitness = 0;
+		double previousTopFitness = 0;
+		final int startOver = 5000;
+		
+		List <Double> fitnesses = new ArrayList<Double>();
 		// TODO: refactor with aop
 		long startSelection=0,selectionTime=0,startCrossOver=0,crossOverTime=0,startMutation=0,mutationtime = 0;
 		long startGeneration1=0,startGeneration2=0,generationTime1=0,generationTime2=0,startCalculatingFitness=0,calculateFitnessTime=0,startCloneTime=0,cloneTime=0;
@@ -64,38 +69,51 @@ public class EcMain {
 			pop.doSelection();
 			selectionTime += System.nanoTime() - startSelection;
 			
+			currentTopFitness = pop.getNextPopulation().get(0).getFitness();
+			fitnesses.add(currentTopFitness);
 			
-			startCloneTime = System.nanoTime();
-			//System.out.println("Top Fitness Value: " + pop.getNextPopulation().get(0).getFitness());
-			fitness.add(pop.getNextPopulation().get(0).getFitness());
-			EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
-			cloneTime += System.nanoTime() - startCloneTime;
-			
-			
-			startCrossOver = System.nanoTime();
-			pop.doCrossover();
-			crossOverTime += System.nanoTime() - startCrossOver;
-			
-			
-			startMutation = System.nanoTime();
-			pop.doMutation();
-			mutationtime += System.nanoTime() - startMutation;
-			
-			//Prune trees less than or equal to height of 1
-			if (ecArgs.contains("-p")) {
-				pop.pruneTrees(1); 
+			if (ecArgs.contains("-k")) {
+				if (currentTopFitness == previousTopFitness) {
+					fitnessPlateau += 1;
+				} 
+				else {
+					fitnessPlateau = 0;
+				}
+				previousTopFitness = currentTopFitness;
 			}
-			//replace with the first operand with x if an individual doesn't have x
-			if (ecArgs.contains("-f")) {
-				pop.forceX();
+			if (ecArgs.contains("-k") && fitnessPlateau > startOver) {
+				fitnessPlateau = 0;
+				pop.setNextPopulation(new ArrayList<EcTree>());
+			} 
+			else {
+				startCloneTime = System.nanoTime();
+				System.out.println("Top Fitness Value: " + currentTopFitness);
+				EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
+				cloneTime += System.nanoTime() - startCloneTime;
+				
+				startCrossOver = System.nanoTime();
+				pop.doCrossover();
+				crossOverTime += System.nanoTime() - startCrossOver;
+				
+				startMutation = System.nanoTime();
+				pop.doMutation();
+				mutationtime += System.nanoTime() - startMutation;
+				
+				//Prune trees less than or equal to height of 1
+				if (ecArgs.contains("-p")) {
+					pop.pruneTrees(1); 
+				}
+				//replace with the first operand with x if an individual doesn't have x
+				if (ecArgs.contains("-f")) {
+					pop.forceX();
+				}
+				
+				pop.getNextPopulation().add(clone); //add the clone to the next population
 			}
-			
-			pop.getNextPopulation().add(clone); //add the clone to the next population
 			startGeneration2 = System.nanoTime();
 			fillUpPopulation(pop.getNextPopulation());
 			generationTime2 += System.nanoTime() - startGeneration2;
 			pop.setCurrentPopulation(pop.getNextPopulation());
-			
 		}
 		
 		long stopTime = System.nanoTime();
@@ -111,9 +129,9 @@ public class EcMain {
 		execTimeBean.setCloneTime(cloneTime/1000000000.0);
 		execTimeBean.setCrossOverTime(crossOverTime/1000000000.0 );
 		execTimeBean.setMutationTime(mutationtime/1000000000.0);
-		Collections.sort(fitness);
-		execTimeBean.setBestFitness(fitness.get(0));
-		execTimeBean.setWorstFitness(fitness.get(fitness.size()-1));
+		Collections.sort(fitnesses);
+		execTimeBean.setBestFitness(fitnesses.get(0));
+		execTimeBean.setWorstFitness(fitnesses.get(fitnesses.size()-1));
 		execTimeBean.setTotalTime((stopTime - startTime ) / 1000000000.0);
 		execTimeBean.setTargetFunction(targetFunction.getRoot().toString());
 		execTimeBean.setTargetFunctionFitness(targetFunction.getFitness());
@@ -129,9 +147,6 @@ public class EcMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-	
-		
 	}
 	public static void fillUpPopulation (List<EcTree> pop) {
 		while (pop.size() < EcPropertyValues.getInstance().getPopulationSize()) {
