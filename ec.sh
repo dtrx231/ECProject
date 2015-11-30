@@ -19,3 +19,5 @@ mainRoutine "" $1
 mainRoutine f $1
 mainRoutine p $1
 mainRoutine fp $1
+mainRoutine All $1
+mainRoutine k $1
