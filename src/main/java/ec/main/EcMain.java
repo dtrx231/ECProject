@@ -5,11 +5,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.Gson;
 
 import ec.analytics.EcExecTimeBean;
 import ec.util.EcPropertyValues;
+
 
 
 
@@ -28,7 +36,7 @@ public class EcMain {
 		
 		EcPopulation pop = new EcPopulation();
 		EcTree targetFunction = new EcTree();
-		double targetFitness = 0.01;
+		final double targetFitness = 0.01;
 		boolean targetFitnessReached = false;
 		// TODO: move to config file
 		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
@@ -48,16 +56,36 @@ public class EcMain {
 		fillUpPopulation(pop.getCurrentPopulation());
 		generationTime1 = System.nanoTime() - startGeneration1;
 		
-		
+		ExecutorService ecExecutor = Executors.newFixedThreadPool(4);
 		while (!targetFitnessReached) {
 			startCalculatingFitness = System.nanoTime();
 			// calculate fitness
+			
+			Set<Callable<Integer>> cfTasks = new HashSet<>();
 			for (EcTree tree : pop.getCurrentPopulation()) {
-				if( tree.calculateFitness(INPUT,OUTPUT) <= targetFitness) {
+				
+				cfTasks.add((new Callable<Integer>() {
+					
+					@Override
+					public Integer call() throws Exception {
+						// TODO Auto-generated method stub
+						tree.calculateFitness(INPUT,OUTPUT);
+						return 0;
+					}
+				}));
+			}
+			try {
+				ecExecutor.invokeAll(cfTasks);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			
+			for (EcTree tree : pop.getCurrentPopulation()) {
+				if (tree.getFitness() <= targetFitness)
 					targetFitnessReached = true;
 					targetFunction = tree;
 					break;
-				}
 			}
 			calculateFitnessTime += System.nanoTime() - startCalculatingFitness;
 			
@@ -120,6 +148,12 @@ public class EcMain {
 		System.out.println("THIS IS THE TARGET FUNCTION");
 		System.out.println(targetFunction.getRoot().toString());
 		System.out.println(" Total elapsed time: " +  (stopTime - startTime ) / 1000000000.0 + " seconds" );
+		ecExecutor.shutdown();
+		try {
+			ecExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		
 		// package 
 		execTimeBean.setGenerationTime1(generationTime1/1000000000.0);

@@ -15,9 +15,9 @@ mainRoutine() {
 mkdir -p log
 rm -f ecLog.json
 rm -f ecAnalytics.json
-mainRoutine "" $1
-mainRoutine f $1
-mainRoutine p $1
-mainRoutine fp $1
-mainRoutine All $1
+#mainRoutine "" $1
+#mainRoutine f $1
+#mainRoutine p $1
+#mainRoutine fp $1
+#mainRoutine All $1
 mainRoutine k $1
