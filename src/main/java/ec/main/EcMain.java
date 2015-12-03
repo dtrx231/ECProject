@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import com.google.gson.Gson;
-
-import ec.analytics.EcExecTimeBean;
 import ec.util.EcPropertyValues;
 
 
@@ -24,7 +21,6 @@ public class EcMain {
 		List<String> ecArgs = new ArrayList<>();
 		ecArgs.addAll(Arrays.asList(args));
 		long startTime = System.nanoTime();
-		EcExecTimeBean execTimeBean = new EcExecTimeBean();
 		
 		EcPopulation pop = new EcPopulation();
 		EcTree targetFunction = new EcTree();
@@ -80,7 +76,6 @@ public class EcMain {
 			} 
 			else {
 				
-				System.out.println("Top Fitness Value: " + currentTopFitness);
 				EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
 				pop.doCrossover();
 				pop.doMutation();
