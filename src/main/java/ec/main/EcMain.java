@@ -61,6 +61,7 @@ public class EcMain {
 			
 			currentTopFitness = pop.getNextPopulation().get(0).getFitness();
 			fitnesses.add(currentTopFitness);
+			System.out.println("Top Fitness: " + currentTopFitness);
 		
 			if (currentTopFitness == previousTopFitness) {
 				fitnessPlateau += 1;
@@ -90,6 +91,7 @@ public class EcMain {
 		
 		System.out.println("THIS IS THE TARGET FUNCTION");
 		System.out.println(targetFunction.getRoot().toString());
+		System.out.println("TARGET FITNESS = " + targetFunction.getFitness());
 		
 	}
 	public static void fillUpPopulation (List<EcTree> pop) {
