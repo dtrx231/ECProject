@@ -38,9 +38,9 @@ public class EcMain {
 		EcTree targetFunction = new EcTree();
 		final double targetFitness = 0.01;
 		boolean targetFitnessReached = false;
-		// TODO: move to config file
+		// TODO: move to config file		
 		final Double INPUT[] = {-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0};
-		final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0};
+        final Double OUTPUT[] = {4.0,1.5,0.0,-0.5,0.0,1.5,4.0};
 		
 		int fitnessPlateau = 0;
 		double currentTopFitness = 0;
@@ -115,7 +115,7 @@ public class EcMain {
 			} 
 			else {
 				startCloneTime = System.nanoTime();
-				System.out.println("Top Fitness Value: " + currentTopFitness);
+				//System.out.println("Top Fitness Value: " + currentTopFitness);
 				EcTree clone = new EcTree(pop.getNextPopulation().get(0).getRoot().clone()); //Clone the most fit individual
 				cloneTime += System.nanoTime() - startCloneTime;
 				

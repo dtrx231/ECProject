@@ -51,11 +51,13 @@ public class EcPopulation {
 	*/
 	
 	public void pruneTrees(int height) {
+		ArrayList<EcTree> pruned = new ArrayList<EcTree>();
 		for(int i=0 ; i < this.nextPopulation.size() ; i++) {
-			if(this.nextPopulation.get(i).getRoot().getDepth() <= height) {
-				this.nextPopulation.remove(i);
+			if(this.nextPopulation.get(i).getRoot().getDepth() > height) {
+				pruned.add(this.nextPopulation.get(i));
 			}
 		}
+		this.setNextPopulation(pruned);
 	}
 	public void forceX() {
 		for (EcTree e : this.nextPopulation) {
