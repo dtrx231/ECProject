@@ -10,13 +10,7 @@ public class EcDivideOperator extends EcOperator{
 	@Override
 	public double calculateOutput(double input) {
 		double output = 0;
-		if (this.rightChild.data.equals("0")) {
-			output = -9999;
-		}
-		else {
-			output += (this.leftChild.calculateOutput(input) / this.rightChild.calculateOutput(input));
-		}
-		
+		output += (this.leftChild.calculateOutput(input) / this.rightChild.calculateOutput(input));
 		if (Double.isInfinite(output) || Double.isNaN(output)) {
 			output = 9999.0;
 		}

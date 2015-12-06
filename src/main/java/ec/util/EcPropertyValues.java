@@ -113,14 +113,5 @@ public class EcPropertyValues {
 				e.printStackTrace();
 			}
 		}	
-	}
-	
-	public String toString() {
-		return "CONFIG SETTINGS: Max Height: " + this.maxHeight + "; Target Function: " + this.targetFunction +
-			"; Input Data: " + this.inputData + "; Population Size: " + this.populationSize + "; Operands: " +
-			this.operands + "; Operators: " + this.operators + "; Selection Probability: " + this.probSelection +
-			"; Copy Probability: " + this.probClone + "; Mutate Probability: " + this.probMutate + "; Crossover Probability: " +
-			this.probCrossover + ";";
-	}
-	
+	}	
 }

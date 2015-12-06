@@ -5,21 +5,30 @@ import java.util.List;
 
 import org.junit.Test;
 
+import ec.main.EcMain;
+import ec.main.EcPopulation;
 import ec.main.EcTree;
 import ec.nodes.EcNode;
+import ec.util.EcTreeIterator;
 
 public class IteratorTest {
 
 	@Test
 	public void test() {
-		EcTree ecTree1 = TestUtils.createExampleTree();
+
+		EcTree tree = new EcTree(10);
+		int depth = tree.getRoot().getDepth();
+		EcTreeIterator itr = new EcTreeIterator(tree.getRoot());
 		
-		String ecTree1DataExpected[] = {"/","-","*","x","x","1","2"};
-		List<String> ecTree1DataActual = new ArrayList<>();
-		for (EcNode node : ecTree1) {
-			ecTree1DataActual.add(node.getData());
+		System.out.println(tree.getRoot().toString());
+		
+		while(itr.hasNext()) {
+			EcNode node = itr.next();
+			String data = node.getData();
+			System.out.println(data);
+			assertTrue(tree.getRoot().search(data));
 		}
-		assertArrayEquals("Iterator order should be" , ecTree1DataExpected , ecTree1DataActual.toArray());
+		
 	}
 
 }

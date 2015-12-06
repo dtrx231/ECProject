@@ -10,6 +10,7 @@ import ec.nodes.EcNode;
 import ec.nodes.EcNodeFactory;
 import ec.nodes.EcOperand;
 import ec.nodes.EcOperator;
+import ec.util.EcPropertyValues;
 
 public class EcPopulationTest {
 
@@ -106,7 +107,27 @@ public class EcPopulationTest {
 			System.out.println(pop.getNextPopulation().get(a).getRoot().toString() + " " + pop.getNextPopulation().get(a).getRoot().getDepth());
 		}
 		assertTrue(pop.getNextPopulation().size()==0);
+	}
+	
+	@Test
+	public void testDisplayPopulation() {
+		System.out.println("Test DisplayPopulation");
 		
+		EcPopulation pop = new EcPopulation();
+		while (pop.getCurrentPopulation().size() < 10) {
+			EcTree ecTree = new EcTree(5);
+			pop.getCurrentPopulation().add(ecTree);
+		}
+		pop.displayCurrentPopulation();
+		assertTrue(pop.getCurrentPopulation().size()==10);
+		
+		while (pop.getNextPopulation().size() < 5) {
+			EcTree ecTree = new EcTree(5);
+			pop.getNextPopulation().add(ecTree);
+		}
+		
+		pop.displayNextPopulation();
+		assertTrue(pop.getNextPopulation().size()==5);
 	}
 
 }

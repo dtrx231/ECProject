@@ -41,9 +41,6 @@ public class EcPopulation {
 	public void doMutation() {
 		mutationMode.mutate();
 	}
-	public void doClone() {
-		System.out.println("Doing clone");
-	}
 	
 	/*
 	*	Remove trees from population that are less than or equal to the specified height. This will ensure a minimum height is maintained in the 

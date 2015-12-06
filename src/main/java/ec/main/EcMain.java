@@ -147,6 +147,7 @@ public class EcMain {
 		long stopTime = System.nanoTime();
 		System.out.println("THIS IS THE TARGET FUNCTION");
 		System.out.println(targetFunction.getRoot().toString());
+		System.out.println(targetFunction.getFitness());
 		System.out.println(" Total elapsed time: " +  (stopTime - startTime ) / 1000000000.0 + " seconds" );
 		ecExecutor.shutdown();
 		try {

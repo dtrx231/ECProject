@@ -19,7 +19,7 @@ public class EcPopulationDefaultMutationMode implements EcPopulationMutationMode
 			for (EcNode n : e) {
 				// look for a non-empty node
 				if (n.getLeftChild() != null) {
-					if (EcUtils.byChance(10)) { // decide whether to mutate
+					if (EcUtils.byChance(2)) { // decide whether to mutate
 						// randomly pick between left and right child
 						if (EcUtils.flipCoin()) {
 							EcUtils.mutateLeftChild(n);
