@@ -114,5 +114,12 @@ public class EcNodeFactoryTest {
 		assertFalse(op1==op2);
 		
 	}
+	
+	@Test
+	public void testCreateOperand() {
+		EcOperand node = EcNodeFactory.createOperand("x");
+		assertTrue(node instanceof EcOperand);
+		assertTrue(node.getData().equals("x"));
+	}
 
 }

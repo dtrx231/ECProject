@@ -4,6 +4,13 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import ec.behaviors.crossover.EcPopulationCrossoverMode;
+import ec.behaviors.crossover.EcPopulationDefaultCrossoverMode;
+import ec.behaviors.mutation.EcPopulationDefaultMutationMode;
+import ec.behaviors.mutation.EcPopulationMutationMode;
+import ec.behaviors.selection.EcPopulationDefaultSelectionMode;
+import ec.behaviors.selection.EcPopulationSelectionMode;
+import ec.main.EcMain;
 import ec.main.EcPopulation;
 import ec.main.EcTree;
 import ec.nodes.EcNode;
@@ -128,6 +135,172 @@ public class EcPopulationTest {
 		
 		pop.displayNextPopulation();
 		assertTrue(pop.getNextPopulation().size()==5);
+	}
+	
+	@Test
+	public void testDoCrossover() {
+		System.out.println("Test DoCrossover");
+		//Tree 1
+		EcOperator root1 = EcNodeFactory.createOperator("+");
+		EcOperator r1l1 = EcNodeFactory.createOperator("+");
+		EcOperand r1r1 = EcNodeFactory.createOperand("1");
+		EcOperand r1l2 = EcNodeFactory.createOperand("1");
+		EcOperand r1r2 = EcNodeFactory.createOperand("1");
+		
+		root1.setLeftChild(r1l1);
+		root1.setRightChild(r1r1);
+		r1l1.setLeftChild(r1l2);
+		r1l1.setRightChild(r1r2);
+		
+		EcTree t1 = new EcTree(root1);
+		
+		//Tree 2
+		EcOperator root2 = EcNodeFactory.createOperator("-");
+		EcOperator r2l1 = EcNodeFactory.createOperator("-");
+		EcOperand r2r1 = EcNodeFactory.createOperand("2");
+		EcOperand r2l2 = EcNodeFactory.createOperand("2");
+		EcOperand r2r2 = EcNodeFactory.createOperand("2");
+		
+		root2.setLeftChild(r2l1);
+		root2.setRightChild(r2r1);
+		r2l1.setLeftChild(r2l2);
+		r2l1.setRightChild(r2r2);
+		
+		EcTree t2 = new EcTree(root2);
+		
+		ArrayList<EcTree> trees = new ArrayList<EcTree>();
+		trees.add(t1);
+		trees.add(t2);
+		EcPopulation pop = new EcPopulation();
+		pop.setNextPopulation(trees);
+		
+		String origT1 = t1.getRoot().toString();
+		String origT2 = t2.getRoot().toString();
+		
+		double origOutT1 = t1.getRoot().calculateOutput(3.0);
+		double origOutT2 = t2.getRoot().calculateOutput(3.0);
+		
+		assertFalse(origT1.equals(origT2));
+		System.out.println(origT1);
+		System.out.println(origOutT1);
+		System.out.println(origT2);
+		System.out.println(origOutT2);
+		
+		pop.doCrossover();
+		
+		String newT1 = t1.getRoot().toString();
+		String newT2 = t2.getRoot().toString();
+		
+		double newOutT1 = t1.getRoot().calculateOutput(3.0);
+		double newOutT2 = t2.getRoot().calculateOutput(3.0);
+		
+		System.out.println(newT1);
+		System.out.println(newOutT1);
+		System.out.println(newT2);
+		System.out.println(newOutT2);
+
+		
+		//should fail 50% of time due to randomness
+		assertFalse(origT1.equals(newT1));
+		assertFalse(origOutT1==newOutT1 && origOutT2==newOutT2);
+		assertFalse(origT2.equals(newT2));
+		
+	}
+	
+	@Test
+	public void testDoMutation() {
+		System.out.println("Test DoMutation");
+		//Tree 1
+		EcOperator root1 = EcNodeFactory.createOperator("+");
+		EcOperator r1l1 = EcNodeFactory.createOperator("+");
+		EcOperand r1r1 = EcNodeFactory.createOperand("1");
+		EcOperand r1l2 = EcNodeFactory.createOperand("1");
+		EcOperand r1r2 = EcNodeFactory.createOperand("1");
+		
+		root1.setLeftChild(r1l1);
+		root1.setRightChild(r1r1);
+		r1l1.setLeftChild(r1l2);
+		r1l1.setRightChild(r1r2);
+		
+		EcTree t1 = new EcTree(root1);
+		
+		//Tree 2
+		EcOperator root2 = EcNodeFactory.createOperator("-");
+		EcOperator r2l1 = EcNodeFactory.createOperator("-");
+		EcOperand r2r1 = EcNodeFactory.createOperand("2");
+		EcOperand r2l2 = EcNodeFactory.createOperand("2");
+		EcOperand r2r2 = EcNodeFactory.createOperand("2");
+		
+		root2.setLeftChild(r2l1);
+		root2.setRightChild(r2r1);
+		r2l1.setLeftChild(r2l2);
+		r2l1.setRightChild(r2r2);
+		
+		EcTree t2 = new EcTree(root2);
+		
+		ArrayList<EcTree> trees = new ArrayList<EcTree>();
+		trees.add(t1);
+		trees.add(t2);
+		EcPopulation pop = new EcPopulation();
+		pop.setNextPopulation(trees);
+		
+		String origT1 = t1.getRoot().toString();
+		String origT2 = t2.getRoot().toString();
+		
+		double origOutT1 = t1.getRoot().calculateOutput(3.0);
+		double origOutT2 = t2.getRoot().calculateOutput(3.0);
+		
+		assertFalse(origT1.equals(origT2));
+		System.out.println(origT1);
+		System.out.println(origOutT1);
+		System.out.println(origT2);
+		System.out.println(origOutT2);
+		
+		pop.doMutation();
+		
+		String newT1 = t1.getRoot().toString();
+		String newT2 = t2.getRoot().toString();
+		
+		double newOutT1 = t1.getRoot().calculateOutput(3.0);
+		double newOutT2 = t2.getRoot().calculateOutput(3.0);
+		
+		System.out.println(newT1);
+		System.out.println(newOutT1);
+		System.out.println(newT2);
+		System.out.println(newOutT2);
+
+		
+		//should fail 50% of time due to randomness
+		assertFalse(origT1.equals(newT1) && origT2.equals(newT2));
+		assertFalse(origOutT1==newOutT1 && origOutT2==newOutT2);
+		
+	}
+	
+	@Test
+	public void testDoSelection() {
+		System.out.println("Test DoSelection");
+		ArrayList<EcTree> trees = new ArrayList<EcTree>();
+		EcMain.fillUpPopulation(trees);
+		EcPopulation pop = new EcPopulation();
+		pop.setCurrentPopulation(trees);
+		assertTrue(pop.getCurrentPopulation().size()==60);
+		assertTrue(pop.getNextPopulation().size()==0);
+		pop.doSelection();
+		assertTrue(pop.getNextPopulation().size()==45);
+	}
+	
+	@Test
+	public void testGetBehaviors() {
+		EcPopulation pop = new EcPopulation();
+		
+		EcPopulationCrossoverMode crossoverMode = pop.getCrossoverMode();
+		EcPopulationMutationMode mutationMode = pop.getMutationMode();
+		EcPopulationSelectionMode selectionMode = pop.getSelectionMode();
+		
+		assertTrue(crossoverMode instanceof EcPopulationDefaultCrossoverMode);
+		assertTrue(mutationMode instanceof EcPopulationDefaultMutationMode);
+		assertTrue(selectionMode instanceof EcPopulationDefaultSelectionMode);
+		
 	}
 
 }

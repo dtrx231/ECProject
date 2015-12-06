@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import ec.nodes.EcNode;
 import ec.nodes.EcNodeFactory;
 import ec.nodes.EcOperand;
 import ec.nodes.EcOperator;
@@ -40,7 +41,35 @@ public class EcNodeTest {
 		assertTrue(o12.checkData("7"));
 		assertTrue(o13.checkData("8"));
 		assertTrue(o14.checkData("9"));
-		assertTrue(o15.checkData("x"));
+		assertTrue(o15.checkData("x")); 	
+		
+		EcNode node = EcNodeFactory.createRandomNode();
+		
+		if (node instanceof EcOperand) {
+			assertTrue(node.getLeftChild()==null);
+			assertTrue(node.getRightChild()==null);
+			node.setData("1");
+			assertTrue(node.getData().equals("1"));
+		}
+		else {
+			EcOperand l1 = EcNodeFactory.createOperand("x");
+			EcOperand r1 = EcNodeFactory.createOperand("4");
+			node.setLeftChild(l1);
+			node.setRightChild(r1);
+			assertTrue(node.getLeftChild() instanceof EcOperand);
+			assertTrue(node.getLeftChild()==l1);
+			assertTrue(node.getLeftChild().getData().equals("x"));
+			assertTrue(node.getRightChild() instanceof EcOperand);
+			assertTrue(node.getRightChild()==r1);
+			assertTrue(node.getRightChild().getData().equals("4"));
+			node.setData("/");
+			assertTrue(node.getData().equals("/"));
+		}
+		
+		node.setOutput(45.55);
+		assertTrue(node.getOutput()==45.55);
+		
+
 	}
 
 }

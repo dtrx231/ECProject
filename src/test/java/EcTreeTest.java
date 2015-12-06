@@ -30,5 +30,18 @@ public class EcTreeTest {
 		
 		assertTrue(t1.hasX());
 	}
+	
+	@Test
+	public void testGetAndSet() {
+		EcTree tree = new EcTree();
+		tree.setFitness(34.5);
+		assertTrue(tree.getFitness()==34.5);
+		tree.setHeight(11);
+		assertTrue(tree.getHeight()==11);
+		EcOperator root = EcNodeFactory.createOperator("/");
+		tree.setRoot(root);
+		assertTrue(tree.getRoot()==root);
+		assertTrue(tree.getRoot().getData().equals(root.getData()));
+	}
 
 }

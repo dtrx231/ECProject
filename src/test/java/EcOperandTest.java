@@ -2,9 +2,43 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import ec.nodes.EcNode;
+import ec.nodes.EcNodeFactory;
 import ec.nodes.EcOperand;
 
 public class EcOperandTest {
+	
+	@Test
+	public void test() {
+		EcOperand op = new EcOperand("x");
+		assertTrue(op.toString().equals("x"));
+		assertTrue(op.getData().equals("x"));
+	}
+	
+	@Test 
+	public void testCrossover() {
+		EcOperand op = new EcOperand("x");
+		EcNode op2 = op.mutate();
+		assertTrue(op.crossOver(op2)==null);
+	}
+	
+	@Test
+	public void testMutate() {
+		EcOperand op = new EcOperand("x");
+		EcNode op2 = op.mutate();
+		assertTrue(op2 instanceof EcOperand);
+		assertFalse(op==op2);
+		//may fail due to randomness
+		assertFalse(op.getData().equals(op2.getData()));
+	}
+	
+	@Test
+	public void testClone() {
+		EcOperand op = new EcOperand("x");
+		EcNode op2 = op.clone();
+		assertFalse(op==op2);
+		assertTrue(op.getData().equals(op2.getData()));
+	}
 
 	@Test
 	public void testEcOperand() {
@@ -57,6 +91,12 @@ public class EcOperandTest {
 		assertTrue(op2.search("2"));
 		assertFalse(op2.search("3"));
 		
+	}
+	
+	@Test
+	public void getDepth() {
+		EcOperand op = EcNodeFactory.createOperand("1");
+		assertTrue(op.getDepth()==0);
 	}
 
 }
